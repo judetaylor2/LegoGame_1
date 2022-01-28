@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5.0f, jumpHeight = 0.5f, gravity, groundCheckRadius;
+    public float moveSpeed = 5.0f, jumpHeight = 0.5f, gravity, groundCheckRadius, groundDrag, airDrag;
     float turnSmoothVelocity, turnSmoothTime = 0.2f;
     Rigidbody rb;
     public Transform cameraPos, modelDirection, groundCheckOrigin;
-    bool isGrounded;
+    bool isGrounded, isJumping;
     public LayerMask groundMask;
+    public Animator anim;
 
     void OnDrawGizmos()
     {
@@ -43,16 +44,35 @@ public class PlayerController : MonoBehaviour
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             rb.AddForce(moveDir.normalized * moveSpeed * Time.deltaTime);
         }
+        
 
         isGrounded = Physics.CheckSphere(groundCheckOrigin.position, groundCheckRadius, groundMask);
 
-        if (jump >= 0.1f && isGrounded)
+        if (jump > 0 && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpHeight * Time.deltaTime);
+            isJumping = true;
+            rb.drag = groundDrag;
+            rb.AddForce(Vector3.up * jumpHeight * Time.deltaTime, ForceMode.Impulse);
+
+            anim.Play("Harker_Jump");
         }
-        else if (rb.velocity.magnitude <= 5f)
+        else if (jump <= 0 && isGrounded)
         {
-            rb.AddForce(-Vector3.up * jumpHeight * Time.deltaTime);
+            isJumping = false;
+            
+            if (direction.magnitude < 0.1f && !isJumping)
+            {
+                anim.Play("Harker_Idle");
+            }
+            else if (direction.magnitude >= 0.1f && !isJumping)
+            {
+                anim.Play("Harker_Run");
+            }
+        }
+        else
+        {
+            rb.drag = airDrag;
+            
         }
 
         rb.AddForce(-Vector3.up * gravity * Time.deltaTime);
