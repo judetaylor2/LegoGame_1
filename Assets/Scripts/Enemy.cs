@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
     public Transform player;
     bool isAttacking;
     public Animator anim;
+    GameObject triggerCollider;
+    float healthStopWatch;
+    public float attackDelay, attackKnockback;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +24,16 @@ public class Enemy : MonoBehaviour
     {
         if (isAttacking)
         {
+            healthStopWatch += Time.deltaTime;
+            if (healthStopWatch >= attackDelay && triggerCollider != null)
+            {
+                triggerCollider.GetComponent<Health>().health--;
+                
+                triggerCollider.GetComponent<Rigidbody>().AddForce(transform.forward * attackKnockback * 2 * Time.deltaTime);
+                
+                healthStopWatch = 0;
+            }
+            
             Transform t = transform;
             t.LookAt(player.position);
             transform.rotation = Quaternion.Euler(0f, t.eulerAngles.y, 0f);
@@ -44,6 +57,8 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        triggerCollider = other.gameObject;
+        
         if (other.gameObject.tag == "Player")
         isAttacking = true;
     }

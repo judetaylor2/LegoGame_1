@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5.0f, jumpHeight = 0.5f, gravity, groundCheckRadius, groundDrag, airDrag;
+    public float moveSpeed = 5.0f, jumpHeight = 0.5f, gravity, groundCheckRadius, groundDrag, airDrag, attackMoveSpeed;
     float turnSmoothVelocity, turnSmoothTime = 0.2f;
     Rigidbody rb;
     public Transform cameraPos, modelDirection, groundCheckOrigin;
-    bool isGrounded, isJumping;
+    bool isGrounded, isJumping, isAttacking;
     public LayerMask groundMask;
     public Animator anim;
+
+    GameObject triggerCollider;
+    float healthStopWatch;
+    public float attackDelay, attackKnockback;
+
+    bool mouse0_down;
 
     void OnDrawGizmos()
     {
@@ -32,6 +38,8 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         float horizontal = Input.GetAxisRaw("Horizontal");
         float jump = Input.GetAxisRaw("Jump");
+        float mouse0 = Input.GetAxisRaw("Fire1");
+        float mouse1 = Input.GetAxisRaw("Fire2");
         
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
@@ -43,6 +51,33 @@ public class PlayerController : MonoBehaviour
             
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             rb.AddForce(moveDir.normalized * moveSpeed * Time.deltaTime);
+            
+        }
+        
+        if (mouse0 > 0 && !mouse0_down)
+        {
+            mouse0_down = true;
+        }
+        else if (mouse0 == 0)
+        {
+            //anim.SetBool("attack2", false);
+            mouse0_down = false;
+        }
+
+        if (mouse0 > 0)
+        {
+            
+            if (isAttacking)
+            {
+                healthStopWatch += Time.deltaTime;
+                if (healthStopWatch >= attackDelay && triggerCollider != null)
+                {
+                    triggerCollider.GetComponent<Health>().health--;
+                    
+                    healthStopWatch = 0;
+                }
+                
+            }
         }
         
 
@@ -62,7 +97,15 @@ public class PlayerController : MonoBehaviour
             
             if (direction.magnitude < 0.1f && !isJumping)
             {
-                anim.Play("Harker_Idle");
+                if (mouse0 > 0 && mouse0_down)
+                {
+                    anim.SetBool(Random.Range(0,2) == 1 ? "attack1" : "attack2", true);
+                    anim.SetBool(Random.Range(0,2) == 1 ? "attack1" : "attack2", false);
+                }
+                else
+                {
+                    anim.Play("Harker_Idle");
+                }
             }
             else if (direction.magnitude >= 0.1f && !isJumping)
             {
@@ -75,6 +118,23 @@ public class PlayerController : MonoBehaviour
             
         }
 
+
         rb.AddForce(-Vector3.up * gravity * Time.deltaTime);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        triggerCollider = other.gameObject;
+        
+        if (other.gameObject.tag == "Enemy")
+        isAttacking = true;
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        triggerCollider = null;
+        
+        if (other.gameObject.tag == "Enemy")
+        isAttacking = false;
     }
 }

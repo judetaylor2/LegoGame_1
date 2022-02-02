@@ -163,9 +163,11 @@ GameObject:
   m_Component:
   - component: {fileID: 140210239}
   - component: {fileID: 140210238}
+  - component: {fileID: 140210240}
   - component: {fileID: 140210237}
   - component: {fileID: 140210236}
   - component: {fileID: 140210235}
+  - component: {fileID: 140210241}
   - component: {fileID: 140210234}
   m_Layer: 0
   m_Name: Player
@@ -271,6 +273,7 @@ MonoBehaviour:
   groundCheckRadius: 0.1
   groundDrag: 7.5
   airDrag: 5
+  attackMoveSpeed: 1000
   cameraPos: {fileID: 1687258585}
   modelDirection: {fileID: 543450652220509823}
   groundCheckOrigin: {fileID: 60646133}
@@ -278,6 +281,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   anim: {fileID: 1479780759}
+  attackDelay: 0.25
+  attackKnockback: 100000
 --- !u!4 &140210239
 Transform:
   m_ObjectHideFlags: 0
@@ -294,6 +299,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &140210240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140210233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7c54b23b8ab6354fb0edc9e953a037e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 4
+  health: 4
+  coins: 0
+  legoParticle: {fileID: 8766732834115832635, guid: 87d52f567cd20b44fbc2c694ff7cc256, type: 3}
+--- !u!135 &140210241
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140210233}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &166908491
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,7 +986,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1261657812}
-  m_LocalRotation: {x: 0.16733009, y: -1.7e-44, z: 1e-45, w: 0.98590094}
+  m_LocalRotation: {x: 0.16733009, y: -1e-45, z: -0, w: 0.98590094}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -970,6 +1004,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1436733518}
   - component: {fileID: 1436733520}
+  - component: {fileID: 1436733522}
   - component: {fileID: 1436733517}
   - component: {fileID: 1436733516}
   - component: {fileID: 1436733519}
@@ -977,7 +1012,7 @@ GameObject:
   - component: {fileID: 1436733515}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1095,6 +1130,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 140210239}
   anim: {fileID: 1762812308}
+  attackDelay: 2
+  attackKnockback: 10000
 --- !u!136 &1436733521
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1109,6 +1146,22 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1436733522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436733514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7c54b23b8ab6354fb0edc9e953a037e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 2
+  health: 2
+  coins: 0
+  legoParticle: {fileID: 8766732834115832635, guid: 87d52f567cd20b44fbc2c694ff7cc256, type: 3}
 --- !u!95 &1479780759
 Animator:
   serializedVersion: 3
@@ -1240,7 +1293,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_LocalRotation: {x: 0.18518823, y: -0.000000008378568, z: 0.0000000015614792, w: 0.9827031}
+  m_LocalRotation: {x: 0.18518823, y: 0.000000008499611, z: -0.0000000015845351, w: 0.9827031}
   m_LocalPosition: {x: 9.38, y: 21.529999, z: 10.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1460,7 +1513,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847514277}
-  m_LocalRotation: {x: 0.18518822, y: -0.000000008332684, z: 0.0000000015702758, w: 0.9827031}
+  m_LocalRotation: {x: 0.18518822, y: 0.000000008454383, z: -0.0000000015932096, w: 0.9827031}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1534,7 +1587,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2052926708}
-  m_LocalRotation: {x: 0.20303246, y: 4.6258825e-16, z: -1.5273784e-16, w: 0.97917205}
+  m_LocalRotation: {x: 0.20303245, y: 1e-45, z: -0, w: 0.97917205}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
