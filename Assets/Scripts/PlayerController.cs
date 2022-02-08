@@ -100,9 +100,9 @@ public class PlayerController : MonoBehaviour
                 if (mouse0 > 0 && mouse0_down)
                 {
                     anim.SetBool(Random.Range(0,2) == 1 ? "attack1" : "attack2", true);
-                    anim.SetBool(Random.Range(0,2) == 1 ? "attack1" : "attack2", false);
                 }
-                else
+                
+                if (!anim.GetBool("attack1") && !anim.GetBool("attack2"))
                 {
                     anim.Play("Harker_Idle");
                 }
@@ -120,6 +120,7 @@ public class PlayerController : MonoBehaviour
 
 
         rb.AddForce(-Vector3.up * gravity * Time.deltaTime);
+        anim.SetBool(Random.Range(0,2) == 1 ? "attack1" : "attack2", false);
     }
 
     void OnTriggerEnter(Collider other)

@@ -6,6 +6,7 @@ public class Health : MonoBehaviour
 {
     public int maxHealth, health, coins;
     public GameObject legoParticle;
+    public List<GameObject> playerHearts;
 
     void Update()
     {
@@ -15,6 +16,20 @@ public class Health : MonoBehaviour
         {
             Instantiate(legoParticle, transform.position, Quaternion.Euler(-90f, 0f, 0f));
             Destroy(gameObject);
+        }
+
+        if (gameObject.tag == "Player")
+        {
+            bool[] isHeartVisible = new bool[maxHealth];
+            for (int i = 0; i < health; i++)
+            isHeartVisible[i] = true;
+
+            for (int i = 0; i < maxHealth; i++)
+            if (isHeartVisible[i])
+            playerHearts[i].SetActive(true);
+            else
+            playerHearts[i].SetActive(false);
+
         }
     }
 }
