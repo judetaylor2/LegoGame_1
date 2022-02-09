@@ -72,7 +72,9 @@ public class PlayerController : MonoBehaviour
                 healthStopWatch += Time.deltaTime;
                 if (healthStopWatch >= attackDelay && triggerCollider != null)
                 {
-                    triggerCollider.GetComponent<Health>().health--;
+                    Health h;
+                    if (triggerCollider.TryGetComponent<Health>(out h))
+                    h.health--;
                     
                     healthStopWatch = 0;
                 }

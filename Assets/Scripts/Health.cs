@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public int maxHealth, health, coins;
-    public GameObject legoParticle;
+    public GameObject legoParticle, heartObject;
     public List<GameObject> playerHearts;
 
     void Update()
@@ -15,6 +15,7 @@ public class Health : MonoBehaviour
         if (health == 0 && gameObject.tag != "Player")
         {
             Instantiate(legoParticle, transform.position, Quaternion.Euler(-90f, 0f, 0f));
+            Instantiate(heartObject, transform.position, Quaternion.Euler(-90f, 0f, 0f));
             Destroy(gameObject);
         }
 
@@ -31,5 +32,22 @@ public class Health : MonoBehaviour
             playerHearts[i].SetActive(false);
 
         }
+
     }
+    
+    void OnTriggerEnter(Collider other)
+    {
+        if (gameObject.tag == "Player" && other.tag == "Heart" && health < 4 && health > 0)
+        {
+            health++;
+            Destroy(other.gameObject);
+        }
+        else if (gameObject.tag == "Player" && other.tag == "Stud")
+        {
+            coins++;
+            Destroy(other.gameObject);
+        }
+
+    }
+
 }
