@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
             if (isAttacking)
             {
                 healthStopWatch += Time.deltaTime;
-                if (healthStopWatch >= attackDelay && triggerCollider != null)
+                if (healthStopWatch >= attackDelay && triggerCollider != null && anim.GetCurrentAnimatorStateInfo(0).IsName("attack1") || anim.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
                 {
                     Health h;
                     if (triggerCollider.TryGetComponent<Health>(out h))
@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour
             else if (direction.magnitude >= 0.1f && !isJumping)
             {
                 anim.Play("Harker_Run");
+                
             }
         }
         else
@@ -122,7 +123,15 @@ public class PlayerController : MonoBehaviour
 
 
         rb.AddForce(-Vector3.up * gravity * Time.deltaTime);
-        anim.SetBool(Random.Range(0,2) == 1 ? "attack1" : "attack2", false);
+        //anim.SetBool(Random.Range(0,2) == 1 ? "attack1" : "attack2", false);
+        Debug.Log("direction magnitude: " + direction.magnitude);
+        
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Harker_Run"))
+        {
+            anim.SetBool("attack1", false);
+            anim.SetBool("attack2", false);
+            
+        }
     }
 
     void OnTriggerEnter(Collider other)
