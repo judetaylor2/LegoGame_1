@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
             if (isAttacking)
             {
                 healthStopWatch += Time.deltaTime;
-                if (healthStopWatch >= attackDelay && triggerCollider != null && anim.GetCurrentAnimatorStateInfo(0).IsName("attack1") || anim.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
+                if (healthStopWatch >= attackDelay && triggerCollider != null && !anim.GetCurrentAnimatorStateInfo(0).IsName("attack1") && !anim.GetCurrentAnimatorStateInfo(0).IsName("attack2"))
                 {
                     Health h;
                     if (triggerCollider.TryGetComponent<Health>(out h))
