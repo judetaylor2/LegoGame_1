@@ -84,7 +84,7 @@ MonoBehaviour:
   moveSpeed: 5000
   jumpHeight: 1250
   gravity: 2000
-  groundCheckRadius: 0.1
+  groundCheckRadius: 0.5
   groundDrag: 7.5
   airDrag: 5
   attackMoveSpeed: 1000

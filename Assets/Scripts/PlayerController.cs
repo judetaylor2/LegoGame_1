@@ -40,6 +40,17 @@ public class PlayerController : MonoBehaviour
         float jump = Input.GetAxisRaw("Jump");
         float mouse0 = Input.GetAxisRaw("Fire1");
         float mouse1 = Input.GetAxisRaw("Fire2");
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            moveSpeed *= 2;
+            anim.speed = 1.5f;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            moveSpeed /= 2;
+            anim.speed = 1;
+        }
         
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
