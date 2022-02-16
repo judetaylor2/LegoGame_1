@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
                 anim.Play(Random.Range(0,2) == 1 ? "Harker_Attack1" : "Harker_Attack2");
             }
         }
-        else
+        else if (Vector3.Distance(transform.position, player.position) <= 50)
         {
             anim.Play("Harker_Run");
             agent.SetDestination(player.position);

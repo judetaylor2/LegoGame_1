@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5.0f, jumpHeight = 0.5f, gravity, groundCheckRadius, groundDrag, airDrag, attackMoveSpeed;
     float turnSmoothVelocity, turnSmoothTime = 0.2f;
     Rigidbody rb;
-    public Transform cameraPos, modelDirection, groundCheckOrigin;
+    public Transform cameraPos, modelDirection, groundCheckOrigin, keyPosition;
     bool isGrounded, isJumping, isAttacking;
     public LayerMask groundMask;
     public Animator anim;
@@ -151,6 +151,12 @@ public class PlayerController : MonoBehaviour
         
         if (other.gameObject.tag == "Enemy")
         isAttacking = true;
+        else if (other.gameObject.tag == "Key")
+        {
+            other.transform.position = keyPosition.position;
+            other.transform.parent = keyPosition;
+
+        }
     }
 
     void OnTriggerExit(Collider other)

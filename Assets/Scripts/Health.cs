@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public int maxHealth, health, coins;
-    public GameObject legoParticle, heartObject, coinObject;
+    public GameObject legoParticle, heartObject, coinObject, keyObject;
     public List<GameObject> playerHearts;
 
     void Update()
@@ -18,6 +18,9 @@ public class Health : MonoBehaviour
             Instantiate(heartObject, transform.position, Quaternion.Euler(-90f, 0f, 0f));
             for (int i = 0; i < Random.Range(4, 8); i++)
             Instantiate(coinObject, transform.position + new Vector3(Random.Range(-5, 5), 0f, Random.Range(-5, 5)), Quaternion.Euler(-90f, 0f, 0f));
+
+            if (keyObject != null)
+            keyObject.transform.parent = null;
             
             Destroy(gameObject);
         }
