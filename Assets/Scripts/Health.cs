@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
     public int maxHealth, health, coins;
-    public GameObject legoParticle, heartObject, coinObject, keyObject;
+    public GameObject legoParticle, heartObject, coinObject, keyObject, loseScreen;
     public List<GameObject> playerHearts;
+    bool isDestroyed;
 
     void Update()
     {
         health = Mathf.Clamp(health, 0, maxHealth);
 
-        if (health == 0 && gameObject.tag != "Player")
+        if (health == 0 && !isDestroyed)
         {
             Instantiate(legoParticle, transform.position, Quaternion.Euler(-90f, 0f, 0f));
             Instantiate(heartObject, transform.position, Quaternion.Euler(-90f, 0f, 0f));
@@ -21,8 +23,27 @@ public class Health : MonoBehaviour
 
             if (keyObject != null)
             keyObject.transform.parent = null;
+
+            if (gameObject.tag == "Player")
+            {
+                loseScreen.SetActive(true);
+                StartCoroutine("ReloadScene");
+                
+                MeshRenderer[] l = GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer m in l)
+                {
+                    m.enabled = false;
+                }
+
+                GetComponent<PlayerController>().enabled = false;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+
+            isDestroyed = true;
             
-            Destroy(gameObject);
         }
 
         if (gameObject.tag == "Player")
@@ -54,6 +75,12 @@ public class Health : MonoBehaviour
             Destroy(other.gameObject);
         }
 
+    }
+
+    IEnumerator ReloadScene()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene(0);
     }
 
 }
