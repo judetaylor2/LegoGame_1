@@ -18,6 +18,9 @@ public class Goal : MonoBehaviour
     IEnumerator ReloadScene()
     {
         yield return new WaitForSeconds(5f);
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        SceneManager.LoadScene(1);
+        else
         SceneManager.LoadScene(0);
     }
 }

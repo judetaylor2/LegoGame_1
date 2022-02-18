@@ -80,7 +80,7 @@ public class Health : MonoBehaviour
     IEnumerator ReloadScene()
     {
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 }
